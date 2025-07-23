@@ -75,9 +75,6 @@ void loop() {
     }
   }
 
-  // Pause entre une rotation horaire et une rotation anti horaire
-  //delay(attenteTour);
-
   // Pause après une rotation horaire / anti horaire permettant d'arrêter physiquement le système, moteurs bien placés
   Serial.println("Pause entre deux révolutions");
   int nbClign = (step == 1) ? nbClignLed : 1;
