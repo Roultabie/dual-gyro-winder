@@ -23,7 +23,7 @@ const int ledSwitch = 4; // Numéro de la broche à laquelle est connecté la le
 const int nbPas = 4096; // Nombre de pas demandés au moteur, une rotation complète avec 2048 pas (1 tour environ 4.5sec)
 const int nbClignLed = 3; // Nombre de clignotement de la led après deux rotations (permet d'arrêter le système moteurs bien placés)
 const int attenteLed = 1000; // Durée en ms entre les deux clignotements de la led.
-const int series = 2; // Nombre de révolutions faites avant une pause
+const int series = 30; // Nombre de révolutions faites avant une pause
 const int speed = 300; // Vitesse de 300 (max) réduire ce chiffre pour un mouvement plus lent du moteur pas à pas
 //100 permet d'avoir un couple élevé >300 le moteur vibre sans tourner
 const unsigned long pause = 300000; // Pause entre deux séries (en millisecondes)
@@ -58,9 +58,6 @@ void loop() {
   // Lancement d'un série de rotations
   // Rotation simultanée des moteurs quand le switch est au centre
   Serial.println("Rotation des moteurs");
-  Serial.println(compteur);
-  // Rotation au sens horaire
-  Serial.println("Rotation horaire");
   int step = (compteur % 2) ? 1 : -1; // On vérifie si pair ou impair pour lancer la rotation dans les deux sens
   for (int st = 1; st <= nbPas; st++) {
     if (motors == 0 || motors == 1) {
