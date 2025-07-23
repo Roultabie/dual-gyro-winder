@@ -24,7 +24,7 @@ const int nbPas = 4096; // Nombre de pas demandés au moteur, une rotation compl
 const int nbClignLed = 3; // Nombre de clignotement de la led après deux rotations (permet d'arrêter le système moteurs bien placés)
 const int attenteLed = 1000; // Durée en ms entre les deux clignotements de la led.
 const int attenteTour = 1000; // Durée en ms entre une rotation horaire et une rotation anti horaire
-const int series = 30; // Nombre de révolutions faites avant une pause
+const int series = 2; // Nombre de révolutions faites avant une pause
 const int speed = 300; // Vitesse de 300 (max) réduire ce chiffre pour un mouvement plus lent du moteur pas à pas
 //100 permet d'avoir un couple élevé >300 le moteur vibre sans tourner
 const unsigned long pause = 300000; // Pause entre deux séries (en millisecondes)
@@ -58,46 +58,39 @@ void loop() {
                                    //100 permet d'avoir un couple élevé >300 le moteur vibre sans tourner
 
   // Lancement d'un série de rotations
-  if (compteur < series) {
-    // Rotation simultanée des moteurs quand le switch est au centre
-    Serial.println("Rotation des moteurs");
-    Serial.println(motors);
-    Serial.println("Série no :");
-    Serial.println(compteur);
-    int st;  // Pour simulation de rotation simultanée des moteurs
-    // Rotation au sens horaire
-    Serial.println("Rotation horaire");
-    int step = (compteur % 2) ? 1 : -1; // On vérifie si pair ou impair pour lancer la rotation dans les deux sens
-    Serial.println(step);
-    for (st = 1; st <= nbPas; st++) {
-      if (motors == 0 || motors == 1) {
-        small_stepper1.step(step);
-      }
-      if (motors == 0 || motors == 2) {
-        small_stepper2.step(step);
-      }
+  // Rotation simultanée des moteurs quand le switch est au centre
+  Serial.println("Rotation des moteurs");
+  Serial.println(compteur);
+  int st;  // Pour simulation de rotation simultanée des moteurs
+  // Rotation au sens horaire
+  Serial.println("Rotation horaire");
+  int step = (compteur % 2) ? 1 : -1; // On vérifie si pair ou impair pour lancer la rotation dans les deux sens
+  Serial.println(step);
+  for (st = 1; st <= nbPas; st++) {
+    if (motors == 0 || motors == 1) {
+      small_stepper1.step(step);
     }
-
-    // Pause entre une rotation horaire et une rotation anti horaire
-    //delay(attenteTour);
-
-    // Pause après une rotation horaire / anti horaire permettant d'arrêter physiquement le système, moteurs bien placés
-    if (step == 1) {
-      Serial.println("Pause entre deux révolutions");
-      for (int led = 0; led < nbClignLed; led++) {
-        // Clignotement de la led
-        digitalWrite(ledSwitch, LOW);
-        delay(attenteLed);
-        digitalWrite(ledSwitch, HIGH);
-        delay(attenteLed);
-      }
+    if (motors == 0 || motors == 2) {
+      small_stepper2.step(step);
     }
-    compteur++;  //Ajoute 1 au Compteur
-  } else {
-    Serial.println("Pause à la fin d'une série");
-    // On s'assure que la LED est allumée
+  }
+
+  // Pause entre une rotation horaire et une rotation anti horaire
+  //delay(attenteTour);
+
+  // Pause après une rotation horaire / anti horaire permettant d'arrêter physiquement le système, moteurs bien placés
+  Serial.println("Pause entre deux révolutions");
+  int nbClign = (step == 1) ? nbClignLed : 1;
+  for (int led = 0; led < nbClign; led++) {
+    // Clignotement de la led
+    digitalWrite(ledSwitch, LOW);
+    delay(attenteLed);
     digitalWrite(ledSwitch, HIGH);
-    Serial.println(pause);
+    delay(attenteLed);
+  }
+  compteur++;  //Ajoute 1 au Compteur
+  if (compteur >= series) {
+    Serial.println("Pause à la fin d'une série");
     delay(pause);
     // On réinitialise le compteur de séries
     Serial.println("Rénitialisation du compteur");
