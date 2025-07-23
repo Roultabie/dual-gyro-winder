@@ -89,7 +89,7 @@ void loop() {
     delay(attenteLed);
   }
   compteur++;  //Ajoute 1 au Compteur
-  if (compteur >= series) {
+  if (compteur >= series * 2) { // on multipie series par 2 pour faire une série de révolution horaire, anti horaire
     Serial.println("Pause à la fin d'une série");
     delay(pause);
     // On réinitialise le compteur de séries
