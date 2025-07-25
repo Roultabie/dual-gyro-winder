@@ -63,7 +63,7 @@ void loop() {
 
   // Pause après une rotation horaire / anti horaire permettant d'arrêter physiquement le système, moteurs bien placés
   Serial.println("Pause entre deux révolutions");
-  int nbClign = (compteur >= series * 2) ? pause / 2 : (step == 1) ? nbClignLed : 1;
+  int nbClign = (compteur >= series * 2) ? pause / 2 : (step == 1) ? nbClignLed : 1; // Soit longue pause, soit pose entre 2 révolution, sinon micro pause
   for (int i = 0; i < nbClign * 2; i++) { // Gestion du clignotement, on multiplie par 2 pour respecter le nombre souhaité
     digitalWrite(ledSwitch, (i % 2) ? LOW : HIGH); // Si pair, led éteinte, si impair, led allumée
     delay(attenteLed);
