@@ -37,7 +37,6 @@ int compteur = 0;
 
 void setup() {
   Serial.begin(9600);  // 9600 bps
-  Serial.println("Lancement du mouvement gyroscopique");
   pinMode(ledSwitch, OUTPUT);  // Declare le Pin 5 comme sortie pour la LED et indique que la broche led est une sortie :
   pinMode(selecteurLeft, INPUT); // indique que la broche bouton est une entrée :
   pinMode(selecteurRight, INPUT); // indique que la broche bouton est une entrée :
@@ -54,7 +53,6 @@ void loop() {
 
   // Lancement d'un série de rotations
   // Rotation simultanée des moteurs quand le switch est au centre
-  Serial.println("Rotation des moteurs");
   int direction = (compteur % 2) ? 1 : -1; // On vérifie si pair ou impair pour lancer la rotation dans les deux sens
   for (int i = 1; i <= nbPas; i++) {
     if (motors == 0 || motors == 1) motor1.step(direction);
@@ -62,7 +60,6 @@ void loop() {
   }
 
   // Pause après une rotation horaire / anti horaire permettant d'arrêter physiquement le système, moteurs bien placés
-  Serial.println("Pause entre deux révolutions");
   int nbClign = (compteur >= series * 2) ? pause / 2 : (direction == 1) ? nbClignLed : 1; // Soit longue pause, soit pose entre 2 révolution, sinon micro pause
   for (int i = 0; i < nbClign * 2; i++) { // Gestion du clignotement, on multiplie par 2 pour respecter le nombre souhaité
     digitalWrite(ledSwitch, (i % 2) ? LOW : HIGH); // Si pair, led éteinte, si impair, led allumée
