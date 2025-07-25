@@ -56,22 +56,16 @@ void loop() {
   // Rotation simultanée des moteurs quand le switch est au centre
   Serial.println("Rotation des moteurs");
   int step = (compteur % 2) ? 1 : -1; // On vérifie si pair ou impair pour lancer la rotation dans les deux sens
-  for (int st = 1; st <= nbPas; st++) {
-    if (motors == 0 || motors == 1) {
-      small_stepper1.step(step);
-    }
-    if (motors == 0 || motors == 2) {
-      small_stepper2.step(step);
-    }
+  for (int i = 1; i <= nbPas; i++) {
+    if (motors == 0 || motors == 1) small_stepper1.step(step);
+    if (motors == 0 || motors == 2) small_stepper2.step(step);
   }
 
   // Pause après une rotation horaire / anti horaire permettant d'arrêter physiquement le système, moteurs bien placés
   Serial.println("Pause entre deux révolutions");
   int nbClign = (compteur >= series * 2) ? pause / 2 : (step == 1) ? nbClignLed : 1;
-  for (int led = 0; led < nbClign * 2; led++) { // Gestion du clignotement, on multiplie par 2 pour respecter le nombre souhaité
-    int ledState = (led % 2) ? LOW : HIGH; // Si pair, led éteinte, si impair, led allumée
-    // Clignotement de la led
-    digitalWrite(ledSwitch, ledState);
+  for (int i = 0; i < nbClign * 2; i++) { // Gestion du clignotement, on multiplie par 2 pour respecter le nombre souhaité
+    digitalWrite(ledSwitch, (i % 2) ? LOW : HIGH); // Si pair, led éteinte, si impair, led allumée
     delay(attenteLed);
   }
   compteur = (compteur < series * 2) ? compteur += 1 : 0;  //Ajoute 1 au Compteur si < à série, sinon, on le réinitialise
