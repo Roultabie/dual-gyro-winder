@@ -1,20 +1,4 @@
-//**************************************************************
-// Commande de moteur pas-à-pas unipolaire 4 fils
-// tiptopboards.com 05/12/2013
-// Mise à jour du 28/07/2025
-// Refactorisation du code
-// Ajout de la gestion de la rotation des moteurs simultanés
-// Ajout d'un section dédiée à la personnalisation des variables
-// Ajout de documentation
-// Driver ULN2003 et moteur réducté au 1:64 de type 28BYJ-48
-// 64 pas par tour, 4 phases, angle de 5.625° selon les spécifications du moteur
-// Démultiplication 1:64 pour ce moteur réducté mécaniquement
-// 360° / 5.625° * 64 = 4096 angles avec la démultiplication
-// 360° / 5.625° * 64  * 4 bobines / 2 bipolaire = 2048 step / tour
-//
-//**************************************************************
-//Inclure la librairie stepper.h
-#include <Stepper.h>
+#include <Stepper.h> //Inclure la librairie stepper.h
 #define STEPS 100
 
 const int selecteurLeft = 2; // Numéro de la broche à laquelle est connecté le bouton poussoir 1
@@ -48,8 +32,8 @@ void loop() {
   // lit l'état du sélecteur 3 positions et extrapole le ou les moteurs allumés dans la variable motors (0 -> les deux moteurs, 1 gauche, 2 droite)
   int motors = (digitalRead(selecteurLeft) == LOW && digitalRead(selecteurRight) == LOW) ? 0 : (digitalRead(selecteurLeft) == HIGH) ? 1 : 2;
 
-  motor1.setSpeed(speed); // On définit la vitesse des moteurs, Vitesse de 300 (max)
-  motor2.setSpeed(speed); //  réduire ce chiffre pour un mouvement plus lent, 100 = couple élevé >300 le moteur vibre sans tourner
+  motor1.setSpeed(speed);
+  motor2.setSpeed(speed);
 
   // Lancement d'un série de rotations
   // Rotation simultanée des moteurs quand le switch est au centre
