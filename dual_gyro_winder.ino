@@ -49,11 +49,8 @@ void loop() {
   // lit l'état du sélecteur 3 positions et extrapole le ou les moteurs allumés dans la variable motors (0 -> les deux moteurs, 1 gauche, 2 droite)
   int motors = (digitalRead(selecteurLeft) == LOW && digitalRead(selecteurRight) == LOW) ? 0 : (digitalRead(selecteurLeft) == HIGH) ? 1 : 2;
 
-  // On définit la vitesse des moteurs
-  Serial.println("Réglage de la vitesse des moteurs");
-  small_stepper1.setSpeed(speed);
-  small_stepper2.setSpeed(speed);  //Vitesse de 300 (max) réduire ce chiffre pour un mouvement plus lent
-                                   //100 permet d'avoir un couple élevé >300 le moteur vibre sans tourner
+  small_stepper1.setSpeed(speed); // On définit la vitesse des moteurs, Vitesse de 300 (max)
+  small_stepper2.setSpeed(speed); //  réduire ce chiffre pour un mouvement plus lent, 100 = couple élevé >300 le moteur vibre sans tourner
 
   // Lancement d'un série de rotations
   // Rotation simultanée des moteurs quand le switch est au centre
