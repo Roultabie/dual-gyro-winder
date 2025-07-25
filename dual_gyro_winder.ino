@@ -30,8 +30,8 @@ const unsigned long pause = 300; // Pause entre deux séries (en secondes)
 
 //Créer une instance de la classe stepper
 //Le moteur (fils 1 2 3 4) est branché sur les sorties 9 10 11 12 de l'Arduino (et sur GND, +V)
-Stepper small_stepper1(STEPS, 9, 11, 10, 12);  // Sens horaire
-Stepper small_stepper2(STEPS, 5, 7, 6, 8); // Sens horaire
+Stepper motor1(STEPS, 9, 11, 10, 12);  // Sens horaire
+Stepper motor2(STEPS, 5, 7, 6, 8); // Sens horaire
 
 int compteur = 0;
 
@@ -49,21 +49,21 @@ void loop() {
   // lit l'état du sélecteur 3 positions et extrapole le ou les moteurs allumés dans la variable motors (0 -> les deux moteurs, 1 gauche, 2 droite)
   int motors = (digitalRead(selecteurLeft) == LOW && digitalRead(selecteurRight) == LOW) ? 0 : (digitalRead(selecteurLeft) == HIGH) ? 1 : 2;
 
-  small_stepper1.setSpeed(speed); // On définit la vitesse des moteurs, Vitesse de 300 (max)
-  small_stepper2.setSpeed(speed); //  réduire ce chiffre pour un mouvement plus lent, 100 = couple élevé >300 le moteur vibre sans tourner
+  motor1.setSpeed(speed); // On définit la vitesse des moteurs, Vitesse de 300 (max)
+  motor2.setSpeed(speed); //  réduire ce chiffre pour un mouvement plus lent, 100 = couple élevé >300 le moteur vibre sans tourner
 
   // Lancement d'un série de rotations
   // Rotation simultanée des moteurs quand le switch est au centre
   Serial.println("Rotation des moteurs");
-  int step = (compteur % 2) ? 1 : -1; // On vérifie si pair ou impair pour lancer la rotation dans les deux sens
+  int direction = (compteur % 2) ? 1 : -1; // On vérifie si pair ou impair pour lancer la rotation dans les deux sens
   for (int i = 1; i <= nbPas; i++) {
-    if (motors == 0 || motors == 1) small_stepper1.step(step);
-    if (motors == 0 || motors == 2) small_stepper2.step(step);
+    if (motors == 0 || motors == 1) motor1.step(direction);
+    if (motors == 0 || motors == 2) motor2.step(direction);
   }
 
   // Pause après une rotation horaire / anti horaire permettant d'arrêter physiquement le système, moteurs bien placés
   Serial.println("Pause entre deux révolutions");
-  int nbClign = (compteur >= series * 2) ? pause / 2 : (step == 1) ? nbClignLed : 1; // Soit longue pause, soit pose entre 2 révolution, sinon micro pause
+  int nbClign = (compteur >= series * 2) ? pause / 2 : (direction == 1) ? nbClignLed : 1; // Soit longue pause, soit pose entre 2 révolution, sinon micro pause
   for (int i = 0; i < nbClign * 2; i++) { // Gestion du clignotement, on multiplie par 2 pour respecter le nombre souhaité
     digitalWrite(ledSwitch, (i % 2) ? LOW : HIGH); // Si pair, led éteinte, si impair, led allumée
     delay(attenteLed);
