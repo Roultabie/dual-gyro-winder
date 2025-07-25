@@ -26,7 +26,7 @@ const int attenteLed = 1000; // Durée en ms entre les deux clignotements de la 
 const int series = 30; // Nombre de révolutions faites avant une pause
 const int speed = 300; // Vitesse de 300 (max) réduire ce chiffre pour un mouvement plus lent du moteur pas à pas
 //100 permet d'avoir un couple élevé >300 le moteur vibre sans tourner
-const unsigned long pause = 300000; // Pause entre deux séries (en millisecondes)
+const unsigned long pause = 300; // Pause entre deux séries (en secondes)
 
 //Créer une instance de la classe stepper
 //Le moteur (fils 1 2 3 4) est branché sur les sorties 9 10 11 12 de l'Arduino (et sur GND, +V)
@@ -70,19 +70,12 @@ void loop() {
 
   // Pause après une rotation horaire / anti horaire permettant d'arrêter physiquement le système, moteurs bien placés
   Serial.println("Pause entre deux révolutions");
-  int nbClign = (step == 1) ? nbClignLed : 1; // Si on est entre deux tours, on ne pause que de 1 seconde
+  int nbClign = (compteur >= series * 2) ? pause / 2 : (step == 1) ? nbClignLed : 1;
   for (int led = 0; led < nbClign * 2; led++) { // Gestion du clignotement, on multiplie par 2 pour respecter le nombre souhaité
-    int ledState = (led % 2) ? LOW : HIGH; // Si pair, led éteinte, si impar, led allumée
+    int ledState = (led % 2) ? LOW : HIGH; // Si pair, led éteinte, si impair, led allumée
     // Clignotement de la led
     digitalWrite(ledSwitch, ledState);
     delay(attenteLed);
   }
-  compteur++;  //Ajoute 1 au Compteur
-  if (compteur >= series * 2) { // on multipie series par 2 pour faire une série de révolution horaire, anti horaire
-    Serial.println("Pause à la fin d'une série");
-    delay(pause);
-    // On réinitialise le compteur de séries
-    Serial.println("Rénitialisation du compteur");
-    compteur = 0;
-  }
+  compteur = (compteur < series * 2) ? compteur += 1 : 0;  //Ajoute 1 au Compteur si < à série, sinon, on le réinitialise
 }
