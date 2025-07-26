@@ -11,7 +11,7 @@ const int series = 30; // Nombre de révolutions faites avant une pause
 const int speed = 300; // Vitesse de 300 (max) réduire ce chiffre pour un mouvement plus lent du moteur pas à pas
 //100 permet d'avoir un couple élevé >300 le moteur vibre sans tourner
 const unsigned long pause = 300; // Pause entre deux séries (en secondes)
-int sens = 2;
+int sens = 2; // Sens de rotation des moteurs : 0 horaire, 1 anti horaire, 2 aléatoire, 3+ horaire puis anti horaire
 
 //Créer une instance de la classe stepper
 //Le moteur (fils 1 2 3 4) est branché sur les sorties 9 10 11 12 de l'Arduino (et sur GND, +V)
