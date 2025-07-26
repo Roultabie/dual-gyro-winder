@@ -36,9 +36,7 @@ void loop() {
   motor1.setSpeed(speed);
   motor2.setSpeed(speed);
 
-  // Lancement d'un série de rotations
-  // Rotation simultanée des moteurs quand le switch est au centre
-  //int direction = (compteur % 2) ? 1 : -1; // On vérifie si pair ou impair pour lancer la rotation dans les deux sens
+  // Lancement d'une série de rotations
   // Sens : 0 horaire, 1 anti horaire, 2 aléatoire, 3+ horaire puis anti horaire
   int direction = (sens == 0) ? -1 : (sens == 1) ? 1 : (sens == 2) ? (random(0, 2) == 0) ? -1 : 1 : (compteur % 2) ? 1 : -1;
   for (int i = 1; i <= nbPas; i++) {
